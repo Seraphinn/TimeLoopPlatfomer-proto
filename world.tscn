@@ -1,0 +1,60 @@
+[gd_scene format=3 uid="uid://c1mos3voqrhfd"]
+
+[ext_resource type="PackedScene" uid="uid://wkcam2kuolhf" path="res://player.tscn" id="1_f3sb7"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_f3sb7"]
+size = Vector2(1145, 78)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fj7yv"]
+size = Vector2(118.75, 373.75)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tlwt5"]
+size = Vector2(336, 453.5)
+
+[node name="World" type="Node2D" unique_id=556817091]
+position = Vector2(361, 161)
+
+[node name="Player" parent="." unique_id=1841085361 instance=ExtResource("1_f3sb7")]
+dash_unlocked = true
+dash_speed = 1000.0
+dash_duration = 0.3
+dash_curve_enabled = true
+dash_curve_initial_velocity = -1000.0
+glide_cooldown = 1.0
+
+[node name="Ground" type="StaticBody2D" parent="." unique_id=657463333]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ground" unique_id=1451802337]
+position = Vector2(218.5, 409)
+shape = SubResource("RectangleShape2D_f3sb7")
+
+[node name="ColorRect" type="ColorRect" parent="Ground" unique_id=850290009]
+offset_left = -4.0
+offset_top = 371.0
+offset_right = 789.0
+offset_bottom = 484.0
+metadata/_edit_use_anchors_ = true
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Ground" unique_id=1209566767]
+position = Vector2(729, 186.875)
+shape = SubResource("RectangleShape2D_fj7yv")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Ground" unique_id=1108085981]
+position = Vector2(-170, 130.75)
+shape = SubResource("RectangleShape2D_tlwt5")
+
+[node name="ColorRect2" type="ColorRect" parent="Ground" unique_id=1749207691]
+offset_left = -154.0
+offset_top = -73.0
+offset_right = -1.0
+offset_bottom = 365.0
+
+[node name="ColorRect3" type="ColorRect" parent="Ground" unique_id=323439352]
+offset_left = 667.0
+offset_top = 2.0
+offset_right = 784.0
+offset_bottom = 366.0
+
+[node name="Level" type="Node2D" parent="." unique_id=713029002]
+
+[node name="TileMapLayer" type="TileMapLayer" parent="Level" unique_id=2016034613]
