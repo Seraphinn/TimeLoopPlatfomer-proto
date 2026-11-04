@@ -1,0 +1,70 @@
+[gd_scene format=3 uid="uid://dwfigo60tvsgi"]
+
+[ext_resource type="Script" uid="uid://6h24lcroncbi" path="res://sword.gd" id="1_83fnj"]
+[ext_resource type="Texture2D" uid="uid://bq0j7bdlpy5pe" path="res://assets/Sword Slashes/White Slash Thin/File1.png" id="2_fahsa"]
+[ext_resource type="Texture2D" uid="uid://cmijrylg2wfoh" path="res://assets/Sword Slashes/White Slash Thin/File2.png" id="3_1o1wo"]
+[ext_resource type="Texture2D" uid="uid://bqq2nv1d4qgax" path="res://assets/Sword Slashes/White Slash Thin/File3.png" id="4_k4l2t"]
+[ext_resource type="Texture2D" uid="uid://cmcfvbtqus18e" path="res://assets/Sword Slashes/White Slash Thin/File4.png" id="5_12tba"]
+[ext_resource type="Texture2D" uid="uid://byl2w57ovu8sy" path="res://assets/Sword Slashes/White Slash Thin/File5.png" id="6_u2t1x"]
+[ext_resource type="Texture2D" uid="uid://b6jae7ag6cdel" path="res://assets/Sword Slashes/White Slash Thin/File6.png" id="7_v0wwq"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_5nb6p"]
+radius = 25.009033
+height = 138.0
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_evhoq"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_fahsa")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_1o1wo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_k4l2t")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_12tba")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_u2t1x")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_v0wwq")
+}],
+"loop": false,
+"name": &"slash",
+"speed": 12.0
+}]
+
+[node name="Sword" type="Node2D" unique_id=302508646 node_paths=PackedStringArray("hitbox")]
+script = ExtResource("1_83fnj")
+attack_directions = null
+max_combo = null
+attack_duration = null
+hitbox_start = null
+hitbox_duration = null
+combo_window_start = null
+combo_window_end = null
+input_buffer_duration = null
+pogo_enabled = null
+pogo_force = null
+pogo_horizontal_momentum = null
+hitbox = NodePath("Hitbox")
+
+[node name="Hitbox" type="Area2D" parent="." unique_id=306924641]
+collision_layer = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=2136185571]
+position = Vector2(40.000004, -5)
+rotation = -1.5604156
+shape = SubResource("CapsuleShape2D_5nb6p")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=344818721]
+position = Vector2(40, -7)
+scale = Vector2(0.29272726, 0.32062498)
+sprite_frames = SubResource("SpriteFrames_evhoq")
+animation = &"slash"
+autoplay = "slash"
+metadata/_edit_lock_ = true

@@ -33,9 +33,6 @@ var dash_curve_active: bool = false
 ## Active la trajectoire courbée pour les dashs horizontaux au sol.
 @export var dash_curve_enabled: bool = false
 
-## Vitesse verticale initiale du dash : négative = vers le haut.
-@export var dash_curve_initial_velocity: float = -180.0
-
 ## Hauteur maximale de la trajectoire en pixels.
 @export var dash_curve_height: float = 100.0
 
@@ -43,6 +40,9 @@ var dash_curve_active: bool = false
 @export_range(1.0, 5.0, 0.1)
 var dash_curve_shape: float = 2.5
 
+## Intensité du ralentissement horizontal en fin de dash.
+@export_range(0.0, 0.9, 0.05)
+var dash_curve_x_ease: float = 0.6
 
 # ============================================================
 # 1. DEPLACEMENT HORIZONTAL
@@ -93,6 +93,13 @@ var max_jumps: int = 1
 
 @export var coyote_time: float = 0.12
 @export var jump_buffer_time: float = 0.12
+
+## Durée minimale pendant laquelle le saut conserve sa hauteur.
+@export var jump_min_hold_time: float = 0.08
+
+var jump_min_hold_timer: float = 0.0
+var jump_cut_pending: bool = false
+var jump_released_since_takeoff: bool = true
 
 
 @export_subgroup("Double Jump")
@@ -271,6 +278,7 @@ func _physics_process(delta: float) -> void:
 	if glide_requested \
 			and glide_unlocked \
 			and not double_jump_unlocked \
+			and jump_released_since_takeoff \
 			and glide_cooldown_timer <= 0.0 \
 			and not is_on_floor():
 		start_glide()
@@ -304,7 +312,16 @@ func update_timers(delta: float) -> void:
 		coyote_timer = maxf(coyote_timer - delta, 0.0)
 
 	jump_buffer_timer = maxf(jump_buffer_timer - delta, 0.0)
+	jump_hold_timer = maxf(jump_hold_timer - delta, 0.0)
 
+	if jump_min_hold_timer > 0.0:
+		jump_min_hold_timer = maxf(jump_min_hold_timer - delta, 0.0)
+
+		if jump_min_hold_timer <= 0.0 and jump_cut_pending:
+			if velocity.y < 0.0:
+				velocity.y *= jump_cut_multiplier
+
+			jump_cut_pending = false
 
 func update_jump_buffer() -> void:
 	if Input.is_action_just_pressed("jump"):
@@ -457,11 +474,14 @@ func perform_jump() -> void:
 	coyote_timer = 0.0
 	jump_buffer_timer = 0.0
 
+	jump_min_hold_timer = jump_min_hold_time
+	jump_cut_pending = false
+	jump_released_since_takeoff = false
+
 	if is_double_jump:
 		jump_hold_timer = double_jump_hold_max_time
 	else:
 		jump_hold_timer = jump_hold_max_time
-
 
 # ============================================================
 # 13. DÉTECTION DU RELÂCHEMENT DU SAUT
@@ -469,11 +489,13 @@ func perform_jump() -> void:
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_released("jump"):
+		jump_released_since_takeoff = true
 		jump_hold_timer = 0.0
 
-		if velocity.y < 0.0:
+		if jump_min_hold_timer > 0.0:
+			jump_cut_pending = true
+		elif velocity.y < 0.0:
 			velocity.y *= jump_cut_multiplier
-
 
 # ============================================================
 # 14. ÉTAT DU SOL
@@ -485,6 +507,7 @@ func update_floor_state() -> void:
 	if on_floor_now:
 		jumps_remaining = max_jumps
 		coyote_timer = coyote_time
+		jump_released_since_takeoff = true
 		cancel_glide()
 
 	was_on_floor = on_floor_now
@@ -556,9 +579,19 @@ func update_dash(delta: float) -> void:
 		1.0
 	)
 
+	var x_progress: float = progress
+	if dash_curve_active:
+		x_progress += (
+			dash_curve_x_ease
+			* progress
+			* (1.0 - progress)
+		)
 	var target_position: Vector2 = (
 		dash_start_position
-		+ dash_direction * dash_speed * dash_duration * progress
+		+ Vector2(
+			dash_direction.x * dash_speed * dash_duration * x_progress,
+			dash_direction.y * dash_speed * dash_duration * progress
+		)
 	)
 
 	if dash_curve_active:
@@ -590,9 +623,6 @@ func update_dash(delta: float) -> void:
 func end_dash() -> void:
 	is_dashing = false
 	dash_curve_active = false
-	# Conserver une partie de l'élan final.
-	velocity *= 0.40
-
 
 # ============================================================
 # 16. DÉPLACEMENT MURAL

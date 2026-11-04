@@ -1,6 +1,8 @@
 [gd_scene format=3 uid="uid://c1mos3voqrhfd"]
 
 [ext_resource type="PackedScene" uid="uid://wkcam2kuolhf" path="res://player.tscn" id="1_f3sb7"]
+[ext_resource type="PackedScene" uid="uid://dwfigo60tvsgi" path="res://sword.tscn" id="2_tlwt5"]
+[ext_resource type="PackedScene" uid="uid://gws2de2tu8nd" path="res://test_pogo.tscn" id="3_aqk2v"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_f3sb7"]
 size = Vector2(1145, 78)
@@ -15,12 +17,21 @@ size = Vector2(336, 453.5)
 position = Vector2(361, 161)
 
 [node name="Player" parent="." unique_id=1841085361 instance=ExtResource("1_f3sb7")]
+position = Vector2(190, 290)
 dash_unlocked = true
 dash_speed = 1000.0
 dash_duration = 0.3
 dash_curve_enabled = true
-dash_curve_initial_velocity = -1000.0
+dash_curve_shape = 5.0
+glide_unlocked = true
 glide_cooldown = 1.0
+wall_abilities_unlocked = true
+
+[node name="Sword" parent="Player" unique_id=302508646 instance=ExtResource("2_tlwt5")]
+position = Vector2(5, 27)
+hitbox_start = 0.0
+combo_window_start = 0.12
+combo_window_end = 0.5
 
 [node name="Ground" type="StaticBody2D" parent="." unique_id=657463333]
 
@@ -58,3 +69,6 @@ offset_bottom = 366.0
 [node name="Level" type="Node2D" parent="." unique_id=713029002]
 
 [node name="TileMapLayer" type="TileMapLayer" parent="Level" unique_id=2016034613]
+
+[node name="TestPogo" parent="." unique_id=43315695 instance=ExtResource("3_aqk2v")]
+position = Vector2(445, 268)

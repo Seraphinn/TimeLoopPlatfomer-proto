@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://gws2de2tu8nd"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pwotj"]
+size = Vector2(37, 23)
+
+[node name="TestPogo" type="StaticBody2D" unique_id=43315695 groups=["pogoable"]]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1322348533]
+position = Vector2(18.5, 11.5)
+shape = SubResource("RectangleShape2D_pwotj")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1613225333]
+offset_right = 37.0
+offset_bottom = 23.0
+color = Color(0.35499462, 0.2583278, 0.8134213, 1)

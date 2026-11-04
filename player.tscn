@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://dqj7yeah8iol6" path="res://player.gd" id="1_4flbx"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_186t8"]
-size = Vector2(35, 31.5)
+size = Vector2(26.5, 43.75)
 
 [node name="Player" type="CharacterBody2D" unique_id=1841085361]
 script = ExtResource("1_4flbx")
@@ -13,11 +13,11 @@ double_jump_hold_max_time = 0.18
 wall_max_slide_speed = 150.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2117544143]
-position = Vector2(22.5, 23.75)
+position = Vector2(16.75, 25.125)
 shape = SubResource("RectangleShape2D_186t8")
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=2011910205]
 offset_left = 3.0
 offset_top = 4.0
-offset_right = 43.0
-offset_bottom = 44.0
+offset_right = 30.0
+offset_bottom = 46.0
